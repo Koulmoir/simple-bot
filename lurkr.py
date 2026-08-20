@@ -149,7 +149,7 @@ async def _run_main(
             ex.add_note("All VC's found are afk")
             raise ex
         _log.debug(f"Got {len(filtered_vcs)} filtered vc")
-        log_channel = susannaClient.get_channel(1532900780875710584)
+        log_channel = susannaClient.get_channel(1539970407115919470)
         if not isinstance(log_channel, TextChannel):
             return
         _tasks = [
