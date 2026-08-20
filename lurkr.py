@@ -3,14 +3,14 @@ import time
 from asyncio import CancelledError
 from http.client import HTTPException
 from typing import Optional, Callable, Sequence
-from logging import getLogger
+from loguru import logger
 
 import aiohttp
 import discord
 from discord import VoiceChannel, guild, Guild, TextChannel
 from discord.ext.commands import Bot
 
-_log = getLogger("lurkr")
+_log = logger
 
 _base_url = 'https://api.lurkr.gg/v2/'
 _tasks = []
