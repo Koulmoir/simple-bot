@@ -1,5 +1,6 @@
 import asyncio
 import os
+from asyncio import tasks
 
 from dotenv import load_dotenv
 from discord.ext.commands import Bot
@@ -84,4 +85,5 @@ async def _run():
 
 
 if __name__ == '__main__':
-    Bot_task = asyncio.create_task(_run())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(_run())
