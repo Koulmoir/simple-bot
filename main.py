@@ -13,7 +13,7 @@ load_dotenv()
 
 max_retry = 3
 retry_CD_s = 20
-close = None
+close = lambda: None
 
 token = os.getenv("BOT_TOKEN")
 lurkr_token = os.getenv("LURKR_API_TOKEN")
@@ -58,6 +58,19 @@ async def startBot(token: str, client: Bot) ->  None:
     if client.is_closed():
         logger.error("Client disconnected")
 
+async def _on_ready(botClient: Bot):
+    if not lurkr_token:
+        return
+    global close
+    close = run_main_lurkr(
+        susannaClient=botClient,
+        lurkr_token=lurkr_token,
+        tick=20,
+        afk=False,
+        xp=8,
+        guilds=[1532717797292113971]
+    )
+
 async def _run():
     global close
     try:
@@ -68,17 +81,12 @@ async def _run():
         )
         if not token:
             return
-        if not lurkr_token:
-            return
+        @botClient.event
+        async def on_ready():
+            await _on_ready(botClient)
         await startBot(token, botClient)
-        close = run_main_lurkr(
-            susannaClient=botClient,
-            lurkr_token=lurkr_token,
-            tick=30,
-            afk=False,
-            xp=8,
-            guilds=[1532717797292113971]
-        )
+    except asyncio.CancelledError:
+        close()
     except Exception:
         close()
 
