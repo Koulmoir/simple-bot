@@ -1,0 +1,9 @@
+[project]
+name = "simple-bot"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "discord-py>=2.7.1",
+    "loguru>=0.7.3",
+    "python-dotenv>=1.2.3",
+]
