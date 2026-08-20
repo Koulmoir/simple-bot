@@ -39,9 +39,13 @@ def _filter_vc(afk: bool, vcs: Sequence[VoiceChannel]) -> Sequence[VoiceChannel]
     new_collection = [channel for channel in vcs if not channel.name.startswith("AFK")]
     return new_collection if len(new_collection) > 0 else None
 
+
 def _build_id_list(vc: VoiceChannel):
     _log.debug(f"Building member list for channel: {vc.name} ({vc.id})")
-    return [member for member,status in vc.voice_states.items() if not status.mute]
+    return [
+        member for member in vc.members
+        if not (member.voice.mute or member.voice.self_mute)
+    ]
 
 async def _upd_xp(
         sesh,
