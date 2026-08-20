@@ -5,11 +5,10 @@ from asyncio import tasks
 from dotenv import load_dotenv
 from discord.ext.commands import Bot
 from discord import LoginFailure, HTTPException, GatewayNotFound, Client, Intents
-from logging import getLogger
+from loguru import logger
 
 from lurkr import run_main_lurkr
 
-logger = getLogger("Main")
 load_dotenv()
 
 max_retry = 3
