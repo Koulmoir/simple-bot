@@ -6,7 +6,8 @@ from typing import Optional, Callable, Sequence
 from logging import getLogger
 
 import aiohttp
-from discord import VoiceChannel, guild, Guild
+import discord
+from discord import VoiceChannel, guild, Guild, TextChannel
 from discord.ext.commands import Bot
 
 _log = getLogger("lurkr")
@@ -77,6 +78,7 @@ async def _safely_check_update(
         tick: int,
         xp: int,
         sesh,
+        logChannel: TextChannel
 ):
     try:
         while True:
@@ -92,6 +94,9 @@ async def _safely_check_update(
             guild_id = voice_channel.guild.id
 
             for member_id in member_list:
+                await logChannel.send(
+                    content=f"Updated xp for: {member_id}"
+                )
                 await _upd_xp(
                     guild_id=guild_id,
                     member_id=member_id,
@@ -144,12 +149,14 @@ async def _run_main(
             ex.add_note("All VC's found are afk")
             raise ex
         _log.debug(f"Got {len(filtered_vcs)} filtered vc")
+        log_channel = susannaClient.get_channel(1532900780875710584)
         _tasks = [
             asyncio.create_task(_safely_check_update(
             voice_channel=vc,
             tick=tick,
             xp=xp,
-            sesh=_sesh
+            sesh=_sesh,
+            log=log_channel
         )) for vc in filtered_vcs]
         _log.info("Started lurkr!")
         await asyncio.Event().wait()
