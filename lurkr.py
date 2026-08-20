@@ -150,13 +150,15 @@ async def _run_main(
             raise ex
         _log.debug(f"Got {len(filtered_vcs)} filtered vc")
         log_channel = susannaClient.get_channel(1532900780875710584)
+        if not isinstance(log_channel, TextChannel):
+            return
         _tasks = [
             asyncio.create_task(_safely_check_update(
             voice_channel=vc,
             tick=tick,
             xp=xp,
             sesh=_sesh,
-            log=log_channel
+            logChannel=log_channel
         )) for vc in filtered_vcs]
         _log.info("Started lurkr!")
         await asyncio.Event().wait()
